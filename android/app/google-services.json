@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "290247893396",
+    "project_id": "instaattend",
+    "storage_bucket": "instaattend.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:290247893396:android:93d4306ae40ddeccca2f81",
+        "android_client_info": {
+          "package_name": "com.insta.insta_ams"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsSO1uPuYrhatjLtcQa8To_7ZlhAvLops"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:290247893396:android:7783dc7d2fae77ffca2f81",
+        "android_client_info": {
+          "package_name": "com.insta.instaattend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsSO1uPuYrhatjLtcQa8To_7ZlhAvLops"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
