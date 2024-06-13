@@ -1,16 +1,25 @@
+import 'package:clock_widget/clock_widget.dart';
+import 'package:clock_widget/digital_clock_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:insta_ams/API/local_auth_api.dart';
+import 'package:insta_ams/Model/attendance_entry.dart';
 import 'package:insta_ams/widgets/circle_buttons.dart';
+import 'package:insta_ams/widgets/digital_clock.dart';
 import 'package:intl/intl.dart';
-import 'package:slide_digital_clock/slide_digital_clock.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class CentralDiv extends StatelessWidget {
+class CentralDiv extends StatefulWidget {
   const CentralDiv({super.key});
 
   @override
+  State<CentralDiv> createState() => _CentralDivState();
+}
+
+class _CentralDivState extends State<CentralDiv> {
+  @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
+    bool isLoading = false;
     final dateFormatter = DateFormat('MMMM dd, yyyy - EEEE');
     final currentDate = dateFormatter.format(now);
 
@@ -27,24 +36,7 @@ class CentralDiv extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          DigitalClock(
-            digitAnimationStyle: Curves.elasticOut,
-            areaDecoration: const BoxDecoration(
-              color: Colors.transparent,
-            ),
-            hourMinuteDigitTextStyle: const TextStyle(
-              fontSize: 30,
-              color: Colors.black,
-            ),
-            is24HourTimeFormat: false,
-            showSecondsDigit: false,
-            colon: const Center(
-              child: Text(
-                ":",
-                style: TextStyle(fontSize: 30),
-              ),
-            ),
-          ),
+          Clock(),
           Text(
             currentDate,
             style: const TextStyle(fontSize: 20, color: Color(0xFF888888)),
@@ -54,10 +46,10 @@ class CentralDiv extends StatelessWidget {
             title: "Check-In",
             icon: Icons.login_rounded,
             onTap: () async {
-              final isAuthenticated = await LocalAuthApi.authenticate();
-              isAuthenticated
-                  ? Fluttertoast.showToast(msg: "Authentication Successful")
-                  : Fluttertoast.showToast(msg: "Authentication Failed");
+              setState(() {
+                isLoading = true;
+              });
+              bool response = await RecordAttendance.checkIn();
             },
           ),
           const SizedBox(height: 25),

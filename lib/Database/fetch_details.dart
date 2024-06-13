@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
 class FetchDetails {
   static Future<String?> fetchUserName() async {
@@ -14,6 +15,7 @@ class FetchDetails {
       if (doc.exists && doc.data() != null) {
         var data = doc.data() as Map<String, dynamic>;
         if (data.containsKey('username')) {
+          print(data['username']);
           return data['username'] as String?;
         }
       }
@@ -33,6 +35,7 @@ class FetchDetails {
       if (doc.exists && doc.data() != null) {
         var data = doc.data() as Map<String, dynamic>;
         if (data.containsKey('email')) {
+          print(data['email']);
           return data['email'] as String?;
         }
       }
@@ -74,6 +77,7 @@ class FetchDetails {
         if (doc.exists) {
           var data = doc.data() as Map<String, dynamic>?;
           if (data != null && data.containsKey('Circle')) {
+            print(data['Circle']);
             return data['Circle'] as String?;
           }
         }
@@ -84,6 +88,45 @@ class FetchDetails {
 
     return null;
   }
+
+  static Future<String?> fetchPluscode() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final FirebaseFirestore db = FirebaseFirestore.instance;
+    User? user = auth.currentUser;
+    if (user != null) {
+      String uid = user.uid;
+      try {
+        DocumentSnapshot employeeDoc = await db.collection('employeeDetails').doc(uid).get();
+        if (employeeDoc.exists) {
+          var employeeData = employeeDoc.data() as Map<String, dynamic>?;
+          if (employeeData != null && employeeData.containsKey('Circle')) {
+            String circleName = employeeData['Circle'];
+            DocumentSnapshot circleDoc = await db.collection('Circle').doc(circleName).get();
+            if (circleDoc.exists) {
+              var circleData = circleDoc.data() as Map<String, dynamic>?;
+              if (circleData != null && circleData.containsKey('Pluscode')) {
+                print(circleData['Pluscode']);
+                return circleData['Pluscode'] as String?;
+              } else {
+                Get.snackbar("Oops!", "Pluscode field does not exist in the document");
+              }
+            } else {
+              Get.snackbar("Oops!", "Document does not exist in circle document");
+            }
+          } else {
+            Get.snackbar("Oops!","Circle field does not exist in employeeDetails document");
+          }
+        } else {
+          Get.snackbar("Oops!","Document does not exist in employeeDetails collection");
+        }
+      } catch (e) {
+        print("Error fetching Pluscode field: $e");
+      }
+    }
+
+    return null;
+  }
+
 
   static Future<List<String>?> fetchCircleList() async {
     final FirebaseFirestore db = FirebaseFirestore.instance;

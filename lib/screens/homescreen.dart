@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:insta_ams/Authentication/login.dart';
 import 'package:insta_ams/Database/fetch_details.dart';
 import 'package:insta_ams/screens/announcements.dart';
@@ -29,6 +30,7 @@ class _HomescreenState extends State<Homescreen> {
   @override
   void initState() {
     super.initState();
+    Geolocator.requestPermission();
     _fetchUsername();
     _fetchCircle();
   }

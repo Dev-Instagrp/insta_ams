@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:insta_ams/Authentication/login.dart';
 import 'package:insta_ams/firebase_options.dart';
-import 'package:insta_ams/screens/homescreen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,10 +15,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        fontFamily: "Manrope"
-      ),
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: Login(),
     );

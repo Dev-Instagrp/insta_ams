@@ -201,11 +201,14 @@ class _RegistrationState extends State<Registration> {
       }
       String? department = selectedCircle;
       await FirebaseFirestore.instance.collection('employeeDetails').doc(userId).set({
-        'Employee Name': name,
-        'Email': email,
-        'Phone': phone,
-        'Department': department,
+        'username': name,
+        'email': email,
+        'phoneNumber': phone,
+        'Circle': department,
+        'geoFencing': false,
         'profilePicture': profilePictureUrl,
+        'deletePermission': null,
+        'isEnrolled': false,
       });
       setState(() {
         isLoading = false;
