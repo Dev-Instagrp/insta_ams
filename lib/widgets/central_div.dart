@@ -1,12 +1,11 @@
-import 'package:clock_widget/clock_widget.dart';
-import 'package:clock_widget/digital_clock_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:insta_ams/API/local_auth_api.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
+import 'package:insta_ams/API/camera_utils.dart';
 import 'package:insta_ams/Model/attendance_entry.dart';
 import 'package:insta_ams/widgets/circle_buttons.dart';
 import 'package:insta_ams/widgets/digital_clock.dart';
 import 'package:intl/intl.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class CentralDiv extends StatefulWidget {
   const CentralDiv({super.key});
@@ -16,10 +15,11 @@ class CentralDiv extends StatefulWidget {
 }
 
 class _CentralDivState extends State<CentralDiv> {
+  DetectionStatus? _status;
+
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
-    bool isLoading = false;
     final dateFormatter = DateFormat('MMMM dd, yyyy - EEEE');
     final currentDate = dateFormatter.format(now);
 
@@ -46,10 +46,7 @@ class _CentralDivState extends State<CentralDiv> {
             title: "Check-In",
             icon: Icons.login_rounded,
             onTap: () async {
-              setState(() {
-                isLoading = true;
-              });
-              bool response = await RecordAttendance.checkIn();
+              markAttendance("Check-In");
             },
           ),
           const SizedBox(height: 25),
@@ -61,5 +58,33 @@ class _CentralDivState extends State<CentralDiv> {
         ],
       ),
     );
+  }
+
+  Future<void> markAttendance(String activity) async {
+    if (activity == "Check-In") {
+      try {
+        int result = await authenticateUser();
+        if (result == 0) {
+          Get.snackbar("Oops!", "No Face Detected",
+              backgroundColor: Colors.red.withOpacity(0.5));
+        }
+        else if (result == 1) {
+          Get.snackbar("Oops!", "Face not recognized",
+              backgroundColor: Colors.red.withOpacity(0.5));
+        }
+        else if (result == 2) {
+          Get.snackbar("Kudos!", "Face recognition successful marking your attendance", backgroundColor: Colors.greenAccent.withOpacity(0.5));
+          RecordAttendance.checkIn();
+        }
+      } catch (e) {
+        print("Error in onTap: $e");
+        Get.snackbar("Error", "Something went wrong while processing");
+      } finally {
+        EasyLoading.dismiss();
+      }
+    }
+    else {
+      //TODO Create function for check-out
+    }
   }
 }

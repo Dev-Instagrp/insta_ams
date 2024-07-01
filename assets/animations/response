@@ -1,0 +1,3 @@
+log:
+
+updateDetectionStatus has changed to String data so that it can check switch case properly
